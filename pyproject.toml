@@ -1,0 +1,50 @@
+# pyproject.toml
+# https://packaging.python.org/en/latest/specifications/declaring-project-metadata
+# https://pip.pypa.io/en/stable/reference/build-system/pyproject-toml
+
+[build-system]
+requires = ["setuptools", "setuptools-scm", "build"]
+build-backend = "setuptools.build_meta"
+
+
+[project]
+name = "kaginawa"
+description = "*Unofficial* client for the Kagi API"
+authors = [
+	{name = "Estelle Poulin", email = "dev@inspiredby.es"},
+]
+readme = "README.md"
+requires-python = ">=3.9"
+keywords = ["kaginawa"]
+license = {text = "GPLv3"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+]
+dynamic = ["version", "dependencies"]
+
+
+[project.urls]
+homepage = "https://github.com/estheruary/kaginawa"
+repository = "https://github.com/estheruary/kaginawa"
+changelog = "https://github.com/estheruary/kaginawa/-/blob/main/CHANGELOG.md"
+
+
+[tool.setuptools]
+packages = ["kaginawa"]
+
+
+[tool.setuptools.dynamic]
+version = {attr = "kaginawa.__version__"}
+dependencies = {file = ["requirements.txt"]}
+
+
+[tool.black]
+line-length = 100
+
+
+[tool.isort]
+profile = "black"
+
+
+[tool.vulture]
+ignore_names = ["self", "cls"]

@@ -1,0 +1,2 @@
+class KaginawaError(Exception):
+    pass
