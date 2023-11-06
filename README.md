@@ -40,6 +40,8 @@ for reference in response.references:
  <dd>Because it's like the only word that starts with Kagi</dd>
 </dl>
 
+![kagi_meme](kagi_meme.png)
+
 ## Authors
 
 * Estelle Poulin <dev@inspiredby.es>
