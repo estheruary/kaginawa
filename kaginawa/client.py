@@ -11,12 +11,26 @@ from kaginawa.models import (
 
 
 class Kaginawa:
+    """The main client to the Kagi API"""
+
     def __init__(
         self,
         token: str,
-        session: requests.Session | None = None,
+        session: Optional[requests.Session] = None,
         api_base: str = "https://kagi.com/api",
     ):
+        """Create a new instance of the Kagi API wrapper.
+
+        Parameters:
+          token (str): The API access token to authenticate requests.
+
+          session (Optional[requests.Session], optional): An optional `requests`
+            session object to use for sending HTTP requests. Defaults to `None`.
+
+          api_base (str, optional): The base URL for the Kagi API endpoint.
+            Defaults to "https://kagi.com/api".
+        """
+
         self.token = token
         self.api_base = api_base
 
@@ -28,6 +42,16 @@ class Kaginawa:
         self.session.headers = {"Authorization": f"Bot {self.token}"}
 
     def generate(self, query: str, cache: Optional[bool] = None):
+        """Generate a FastGPT response from a text query.
+
+        Parameters:
+          query (str): The prompt to send to FastGPT.
+
+          cache (Optional[bool], optional): Allow cached responses. Defaults to `None`.
+
+        Returns:
+          KaginawaFastGPTResponse: A model representing the response.
+        """
         try:
             optional_params = {}
 
@@ -51,6 +75,15 @@ class Kaginawa:
         return KaginawaFastGPTResponse.from_raw(raw_response)
 
     def enrich_web(self, query: str):
+        """Query the Teclis index for relevant web results for a given query.
+
+        Parameters:
+          query (str): The search query.
+
+        Returns:
+          KaginawaEnrichWebResponse: A model representing the response.
+        """
+
         try:
             res = self.session.get(
                 f"{self.api_base}/v0/enrich/web",
@@ -73,6 +106,33 @@ class Kaginawa:
         target_language: Optional[str] = None,
         cache: Optional[bool] = None,
     ):
+        """Summarize a URL or text snippet.
+
+        Parameters:
+          url (Optional[str], optional): The URL to summarize. This option is exclusive
+            with the `text` parameter. Defaults to `None`.
+
+          text (Optional[str], optional): The text snippet to summarize. This option is
+            exclusive with the `url` parameter. Defaults to `None`.
+
+          engine (Optional[str], optional): The summarization engine to use. There is a
+            helper enum `KaginawaSummarizationEngine` with the valid values for this
+            parameter. Defaults to `None`.
+
+          summary_type (Optional[str], optional): The 'kind' of summary you would like
+            the model to use. There is a helper enum KaginawaSummaryType with the valid
+            values for this parameter. Defaults to `None`.
+
+          target_language: (Optional[str], optional): The language CODE (eg. EN, ZH, FR)
+            corresponding to the language you would like the summary in. See
+            https://help.kagi.com/kagi/api/summarizer.html for valid language codes.
+            Defaults to `None`.
+
+          cache (Optional[bool], optional): Allow cached responses. Defaults to `None`.
+
+        Returns:
+          KaginawaSummarizationResponse: A model representing the response.
+        """
         try:
             params = {}
 

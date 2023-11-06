@@ -32,6 +32,24 @@ class KaginawaResponse:
 
     @classmethod
     def from_raw(cls, raw_response: Dict[str, Any], **kwargs):
+        """Create a model from the raw API response.
+
+        It's not expected that end-users of this library will ever need to call this
+        method directly. It is called for you when invoking methods on the client.
+
+        This method uses 'cooperative' inheritance due to the nature of external
+        constructors. Subclasses should call `super().from_raw` with all of the
+        subclass specific parameters passed in `**kwargs`.
+
+        Parameters:
+          raw_response (Dict[str, Any]): The raw response from the Kagi API.
+
+          **kwargs: Other parameters to pass to the class constructor.
+
+        Returns:
+          KaginawaResponse: A new instance of the response object.
+        """
+
         duration = timedelta(milliseconds=raw_response["meta"]["ms"])
         raw_response["meta"].pop("ms")
 
@@ -55,6 +73,24 @@ class KaginawaFastGPTResponse(KaginawaResponse):
 
     @classmethod
     def from_raw(cls, raw_response, **kwargs):
+        """Create a model from the raw API response.
+
+        It's not expected that end-users of this library will ever need to call this
+        method directly. It is called for you when invoking methods on the client.
+
+        This method uses 'cooperative' inheritance due to the nature of external
+        constructors. Subclasses should call `super().from_raw` with all of the
+        subclass specific parameters passed in `**kwargs`.
+
+        Parameters:
+          raw_response (Dict[str, Any]): The raw response from the Kagi API.
+
+          **kwargs: Other parameters to pass to the class constructor.
+
+        Returns:
+          KaginawaFastGPTResponse: A new instance of the response object.
+        """
+
         references = [KaginawaReference(**ref) for ref in raw_response["data"]["references"]]
 
         raw_response["data"].pop("references")
@@ -89,12 +125,22 @@ class KaginawaSearchResult:
 
     @classmethod
     def from_raw(cls, raw_result: Dict[str, Any]):
-        _raw_result_copy = raw_result.copy()
+        """Create a model from the raw API response.
 
-        published = datetime.fromisoformat(_raw_result_copy["published"])
-        _raw_result_copy.pop("published")
+        It's not expected that end-users of this library will ever need to call this
+        method directly. It is called for you when invoking methods on the client.
 
-        return cls(published=published, **_raw_result_copy)
+        Parameters:
+          raw_response (Dict[str, Any]): The raw response from the Kagi API.
+
+        Returns:
+          KaginawaSearchResult: A new instance of the result object.
+        """
+
+        published = datetime.fromisoformat(raw_result["published"])
+        raw_result.pop("published")
+
+        return cls(published=published, **raw_result)
 
 
 @dataclass
@@ -103,6 +149,24 @@ class KaginawaEnrichWebResponse(KaginawaResponse):
 
     @classmethod
     def from_raw(cls, raw_response: Dict[str, Any], **kwargs):
+        """Create a model from the raw API response.
+
+        It's not expected that end-users of this library will ever need to call this
+        method directly. It is called for you when invoking methods on the client.
+
+        This method uses 'cooperative' inheritance due to the nature of external
+        constructors. Subclasses should call `super().from_raw` with all of the
+        subclass specific parameters passed in `**kwargs`.
+
+        Parameters:
+          raw_response (Dict[str, Any]): The raw response from the Kagi API.
+
+          **kwargs: Other parameters to pass to the class constructor.
+
+        Returns:
+          KaginawaEnrichWebResponse: A new instance of the response object.
+        """
+
         results = [KaginawaSearchResult.from_raw(raw_result) for raw_result in raw_response["data"]]
 
         return super().from_raw(results=results, **kwargs)
@@ -118,6 +182,24 @@ class KaginawaSummarizationResponse(KaginawaResponse):
 
     @classmethod
     def from_raw(cls, raw_response: Dict[str, Any], **kwargs):
+        """Create a model from the raw API response.
+
+        It's not expected that end-users of this library will ever need to call this
+        method directly. It is called for you when invoking methods on the client.
+
+        This method uses 'cooperative' inheritance due to the nature of external
+        constructors. Subclasses should call `super().from_raw` with all of the
+        subclass specific parameters passed in `**kwargs`.
+
+        Parameters:
+          raw_response (Dict[str, Any]): The raw response from the Kagi API.
+
+          **kwargs: Other parameters to pass to the class constructor.
+
+        Returns:
+          KaginawaSummarizationResponse: A new instance of the response object.
+        """
+
         return super().from_raw(
             raw_response,
             tokens=raw_response["data"]["tokens"],
@@ -127,6 +209,8 @@ class KaginawaSummarizationResponse(KaginawaResponse):
 
 
 class KaginawaSummarizationEngine(StrEnum):
+    """The available summarization engines (as of 2023-11-05)."""
+
     CECIL = "cecil"
     """Friendly, descriptive, fast summary."""
 
@@ -141,6 +225,8 @@ class KaginawaSummarizationEngine(StrEnum):
 
 
 class KaginawaSummaryType(StrEnum):
+    """The available summary types (as of 2023-11-05)."""
+
     SUMMARY = "summary"
     """Paragraph(s) of summary prose."""
 
