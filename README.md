@@ -32,14 +32,13 @@ for reference in response.references:
 
 ## FAQ
 
-Do you support the search API?
+<dl>
+ <dt>Do you support the search API?</dt>
+ <dd>I would love to but I don't have enterprise.</dd>
 
-: I would love to but I don't have enterprise.
-
-Why the name?
-
-: Because it's like the only word that starts with Kagi
-: https://en.wikipedia.org/wiki/Kaginawa.
+ <dt>Why the name?</dt>
+ <dd>Because it's like the only word that starts with Kagi</dd>
+</dl>
 
 ## Authors
 
