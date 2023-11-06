@@ -1,3 +1,4 @@
+import os
 from typing import Optional
 
 import requests
@@ -15,14 +16,17 @@ class Kaginawa:
 
     def __init__(
         self,
-        token: str,
+        token: Optional[str] = None,
         session: Optional[requests.Session] = None,
         api_base: str = "https://kagi.com/api",
     ):
         """Create a new instance of the Kagi API wrapper.
 
         Parameters:
-          token (str): The API access token to authenticate requests.
+          token (Optional[str], optional): The API access token to authenticate
+            requests. If this value is unset the library will attempt to read the
+            environment variable KAGI_API_KEY. If both are unset an exception will
+            be raised.
 
           session (Optional[requests.Session], optional): An optional `requests`
             session object to use for sending HTTP requests. Defaults to `None`.
@@ -30,6 +34,11 @@ class Kaginawa:
           api_base (str, optional): The base URL for the Kagi API endpoint.
             Defaults to "https://kagi.com/api".
         """
+
+        try:
+            token = token or os.environ["KAGI_API_KEY"]
+        except KeyError as e:
+            raise KaginawaError("Value for `token` not given and env KAGI_API_KEY is unset") from e
 
         self.token = token
         self.api_base = api_base
