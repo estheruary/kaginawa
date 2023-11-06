@@ -169,7 +169,7 @@ class KaginawaEnrichWebResponse(KaginawaResponse):
 
         results = [KaginawaSearchResult.from_raw(raw_result) for raw_result in raw_response["data"]]
 
-        return super().from_raw(results=results, **kwargs)
+        return super().from_raw(raw_response, results=results, **kwargs)
 
 
 @dataclass

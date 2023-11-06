@@ -20,7 +20,7 @@ license = {text = "GPLv3"}
 classifiers = [
     "Programming Language :: Python :: 3",
 ]
-dynamic = ["version", "dependencies"]
+dynamic = ["version", "dependencies", "optional-dependencies"]
 
 
 [project.urls]
@@ -36,6 +36,8 @@ packages = ["kaginawa"]
 [tool.setuptools.dynamic]
 version = {attr = "kaginawa.__version__"}
 dependencies = {file = ["requirements.txt"]}
+optional-dependencies.test = {file = ["requirements-test.txt"]}
+optional-dependencies.dev = {file = ["requirements-dev.txt"]}
 
 
 [tool.black]
@@ -48,3 +50,8 @@ profile = "black"
 
 [tool.vulture]
 ignore_names = ["self", "cls"]
+
+[tool.pytest.ini_options]
+pythonpath = [
+  "."
+]
