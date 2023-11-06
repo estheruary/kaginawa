@@ -29,3 +29,18 @@ for reference in response.references:
     print(reference.snippet)
     print(reference.url)
 ```
+
+## FAQ
+
+Do you support the search API?
+
+: I would love to but I don't have enterprise.
+
+Why the name?
+
+: Because it's like the only word that starts with Kagi
+: https://en.wikipedia.org/wiki/Kaginawa.
+
+## Authors
+
+* Estelle Poulin <dev@inspiredby.es>
