@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+
 from kaginawa.models import (
     KaginawaEnrichWebResponse,
     KaginawaFastGPTResponse,
@@ -79,6 +80,31 @@ class TestKaginawaModels:
             assert parsed_reference.snippet == raw_reference["snippet"]
             assert parsed_reference.url == raw_reference["url"]
 
+    def test_kagi_fastgpt_response_no_references(self):
+        fastgpt_kagi_response = {
+            "meta": {
+                "id": (id := "cbad1ea2-ddef-42e7-af75-81bce2c64924"),
+                "node": (node := "us-central1"),
+                "ms": (ms := 1),
+                "api_balance": (api_balance := 5.0),
+            },
+            "data": {
+                "output": (output := ""),
+                "tokens": (tokens := 15),
+            },
+        }
+
+        res = KaginawaFastGPTResponse.from_raw(fastgpt_kagi_response)
+
+        assert res.id == id
+        assert res.node == node
+        assert res.duration == timedelta(milliseconds=ms)
+        assert res.api_balance == api_balance
+
+        assert res.output == output
+        assert res.tokens == tokens
+        assert len(res.references) == 0
+
     def test_kagi_enrich_web_response(self):
         enrich_web_response = {
             "meta": {
@@ -126,7 +152,7 @@ class TestKaginawaModels:
             "data": {
                 "tokens": (tokens := 42),
                 "output": (output := "tl;dr War and Peace: It involves Russia."),
-            }
+            },
         }
 
         res = KaginawaSummarizationResponse.from_raw(summarization_kagi_response)

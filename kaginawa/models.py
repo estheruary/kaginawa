@@ -91,9 +91,11 @@ class KaginawaFastGPTResponse(KaginawaResponse):
           KaginawaFastGPTResponse: A new instance of the response object.
         """
 
-        references = [KaginawaReference(**ref) for ref in raw_response["data"]["references"]]
+        references = [
+            KaginawaReference(**ref) for ref in raw_response["data"].get("references", [])
+        ]
 
-        raw_response["data"].pop("references")
+        raw_response["data"].pop("references", None)
 
         return super().from_raw(
             raw_response,
