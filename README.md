@@ -30,7 +30,9 @@ for reference in response.references:
     print(reference.snippet)
     print(reference.url)
 
-response: KaginawaEnrichWebResponse = client.enrich_web(query="Best fermented hot sauce")
+response: KaginawaEnrichResponse = client.enrich_web(query="Best fermented hot sauce")
+# or 
+response: KaginawaEnrichResponse = client.enrich_news(query="Is Oliver Tree okay?")
 
 for result in response.results:
     print(result.rank)

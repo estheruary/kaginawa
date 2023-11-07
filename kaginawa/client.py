@@ -5,7 +5,7 @@ import requests
 
 from kaginawa.exceptions import KaginawaError
 from kaginawa.models import (
-    KaginawaEnrichWebResponse,
+    KaginawaEnrichResponse,
     KaginawaFastGPTResponse,
     KaginawaSummarizationResponse,
 )
@@ -104,7 +104,30 @@ class Kaginawa:
         except requests.RequestException as e:
             raise KaginawaError("Error calling /v0/enrich/web") from e
 
-        return KaginawaEnrichWebResponse.from_raw(raw_response)
+        return KaginawaEnrichResponse.from_raw(raw_response).results[0]
+
+    def enrich_news(self, query: str):
+        """Query the Teclis index for relevant web results for a given query.
+
+        Parameters:
+          query (str): The search query.
+
+        Returns:
+          KaginawaEnrichWebResponse: A model representing the response.
+        """
+
+        try:
+            res = self.session.get(
+                f"{self.api_base}/v0/enrich/news",
+                params={"q": query},
+            )
+            res.raise_for_status()
+
+            raw_response = res.json()
+        except requests.RequestException as e:
+            raise KaginawaError("Error calling /v0/enrich/web") from e
+
+        return KaginawaEnrichResponse.from_raw(raw_response).results[0]
 
     def summarize(
         self,

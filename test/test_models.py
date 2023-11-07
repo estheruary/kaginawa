@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 
 from kaginawa.models import (
-    KaginawaEnrichWebResponse,
+    KaginawaEnrichResponse,
     KaginawaFastGPTResponse,
     KaginawaResponse,
     KaginawaSearchResult,
@@ -105,7 +105,7 @@ class TestKaginawaModels:
         assert res.tokens == tokens
         assert len(res.references) == 0
 
-    def test_kagi_enrich_web_response(self):
+    def test_kagi_enrich_response(self):
         enrich_web_response = {
             "meta": {
                 "id": (id := "cbad1ea2-ddef-42e7-af75-81bce2c64924"),
@@ -127,7 +127,7 @@ class TestKaginawaModels:
             ),
         }
 
-        res = KaginawaEnrichWebResponse.from_raw(enrich_web_response)
+        res = KaginawaEnrichResponse.from_raw(enrich_web_response)
 
         assert res.id == id
         assert res.node == node

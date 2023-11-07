@@ -146,7 +146,7 @@ class KaginawaSearchResult:
 
 
 @dataclass
-class KaginawaEnrichWebResponse(KaginawaResponse):
+class KaginawaEnrichResponse(KaginawaResponse):
     results: List[KaginawaSearchResult]
 
     @classmethod
