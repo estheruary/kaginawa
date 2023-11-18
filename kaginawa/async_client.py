@@ -12,13 +12,13 @@ from kaginawa.models import (
 )
 
 
-class Kaginawa:
+class AsyncKaginawa:
     """The main client to the Kagi API"""
 
     def __init__(
         self,
         token: Optional[str] = None,
-        session: Optional[httpx.Client] = None,
+        session: Optional[httpx.AsyncClient] = None,
         api_base: str = "https://kagi.com/api",
     ):
         """Create a new instance of the Kagi API wrapper.
@@ -45,13 +45,16 @@ class Kaginawa:
         self.api_base = api_base
 
         if not session:
-            session = httpx.Client()
+            session = httpx.AsyncClient()
 
         self.session = session
 
         self.session.headers = {"Authorization": f"Bot {self.token}"}
 
-    def generate(self, query: str, cache: Optional[bool] = None):
+    async def close(self):
+        return await self.session.aclose()
+
+    async def generate(self, query: str, cache: Optional[bool] = None):
         """Generate a FastGPT response from a text query.
 
         Parameters:
@@ -68,7 +71,7 @@ class Kaginawa:
             if cache is not None:
                 optional_params["cache"] = cache
 
-            res = self.session.post(
+            res = await self.session.post(
                 f"{self.api_base}/v0/fastgpt",
                 json={
                     "query": query,
@@ -85,7 +88,7 @@ class Kaginawa:
 
         return KaginawaFastGPTResponse.from_raw(raw_response)
 
-    def enrich_web(self, query: str):
+    async def enrich_web(self, query: str):
         """Query the Teclis index for relevant web results for a given query.
 
         Parameters:
@@ -96,7 +99,7 @@ class Kaginawa:
         """
 
         try:
-            res = self.session.get(
+            res = await self.session.get(
                 f"{self.api_base}/v0/enrich/web",
                 params={"q": query},
             )
@@ -108,7 +111,7 @@ class Kaginawa:
 
         return KaginawaEnrichResponse.from_raw(raw_response).results[0]
 
-    def enrich_news(self, query: str):
+    async def enrich_news(self, query: str):
         """Query the Teclis index for relevant web results for a given query.
 
         Parameters:
@@ -119,7 +122,7 @@ class Kaginawa:
         """
 
         try:
-            res = self.session.get(
+            res = await self.session.get(
                 f"{self.api_base}/v0/enrich/news",
                 params={"q": query},
             )
@@ -131,7 +134,7 @@ class Kaginawa:
 
         return KaginawaEnrichResponse.from_raw(raw_response).results[0]
 
-    def summarize(
+    async def summarize(
         self,
         url: Optional[str] = None,
         text: Optional[str] = None,
@@ -191,7 +194,7 @@ class Kaginawa:
             if cache is not None:
                 params["cache"] = cache
 
-            res = self.session.post(
+            res = await self.session.post(
                 f"{self.api_base}/v0/summarize",
                 data=params,
             )

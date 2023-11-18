@@ -59,6 +59,25 @@ response: KaginawaSummarizationResponse = client.summarize(
 print(response.output)
 ```
 
+
+## Async!
+
+```python
+import asyncio
+from kaginawa.async_client import AsyncKaginawa
+
+async def amain():
+    kagi_client = AsyncKaginawa(...)
+    res = await kagi_client.generate(...)
+    print(res.output)
+
+    # If you want to explicitly close the client.
+    kagi_client.close()
+
+if __name__ == "__main__":
+    asyncio.run(amain()) 
+```
+
 ## FAQ
 
 <dl>
